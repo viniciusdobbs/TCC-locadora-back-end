@@ -19,7 +19,7 @@ public class ClienteModel implements Serializable {
     @Column(name = "TE_NOME", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "TE_CPF", nullable = false, length = 14)
+    @Column(name = "TE_CPF", nullable = false, length = 11)
     private String cpf;
 
     @Column(name = "TE_EMAIL", nullable = false, length = 100)
