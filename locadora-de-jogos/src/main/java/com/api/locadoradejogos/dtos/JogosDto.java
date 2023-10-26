@@ -18,6 +18,9 @@ public class JogosDto {
     @NotNull
     private double preco;
 
+    @NotNull
+    private double quantidade;
+
     public String getNome() {
         return nome;
     }
@@ -48,5 +51,13 @@ public class JogosDto {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public double getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(double quantidade) {
+        this.quantidade = quantidade;
     }
 }

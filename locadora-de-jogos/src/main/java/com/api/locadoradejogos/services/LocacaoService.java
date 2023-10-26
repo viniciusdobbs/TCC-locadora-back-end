@@ -61,7 +61,7 @@ public class LocacaoService {
         return valor;
     }
 
-    public long validarLocacao(@NotNull ClienteModel clienteModel) {
-        return locacaoRepository.countCliente(clienteModel.getIdPessoa());
+    public int validarLocacao(@NotNull ClienteModel clienteModel) {
+        return locacaoRepository.countCliente(clienteModel.getIdCliente());
     }
 }

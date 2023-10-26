@@ -58,12 +58,8 @@ public class ClienteController {
         }
         ClienteModel clienteModel = clienteModelOptional.get();
         clienteModel.setNome(clienteDto.getNome());
-        clienteModel.setIdadeCliente(clienteDto.getIdadeCliente());
         clienteModel.setCpf(clienteDto.getCpf());
-        clienteModel.setRg(clienteDto.getRg());
         clienteModel.setEmail(clienteDto.getEmail());
-        clienteModel.setEndereco(clienteDto.getEndereco());
-        clienteModel.setTelefoneCliente(clienteDto.getTelefoneCliente());
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.save(clienteModel));
     }
 

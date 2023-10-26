@@ -33,12 +33,8 @@ public class LocacaoModel implements Serializable {
     private JogosModel jogo;
 
     @ManyToOne
-    @JoinColumn(name="ID_CLIENTE", referencedColumnName="ID_PESSOA")
+    @JoinColumn(name="ID_CLIENTE", referencedColumnName="ID_CLIENTE")
     private ClienteModel cliente;
-
-    @ManyToOne
-    @JoinColumn(name="ID_FUNC", referencedColumnName="ID_PESSOA")
-    private FuncionarioModel funcionario;
 
     public UUID getIdLocacao() {
         return idLocacao;
@@ -86,14 +82,6 @@ public class LocacaoModel implements Serializable {
 
     public void setCliente(ClienteModel cliente) {
         this.cliente = cliente;
-    }
-
-    public FuncionarioModel getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(FuncionarioModel funcionario) {
-        this.funcionario = funcionario;
     }
 
     public double getValorFinal() {

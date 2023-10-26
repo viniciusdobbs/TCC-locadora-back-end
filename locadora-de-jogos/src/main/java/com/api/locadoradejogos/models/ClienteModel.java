@@ -1,17 +1,29 @@
 package com.api.locadoradejogos.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "TB_CLIENTE")
-public class ClienteModel extends PessoaModel {
+public class ClienteModel implements Serializable {
 
-    @Column(name = "TE_TELEFONE", nullable = false, length = 20)
-    private String telefoneCliente;
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "NU_IDADE", nullable = false)
-    private double idadeCliente;
+    @Id
+    @Column(name = "ID_CLIENTE")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID idCliente;
+
+    @Column(name = "TE_NOME", nullable = false, length = 100)
+    private String nome;
+
+    @Column(name = "TE_CPF", nullable = false, length = 14)
+    private String cpf;
+
+    @Column(name = "TE_EMAIL", nullable = false, length = 100)
+    private String email;
 
     @OneToMany(mappedBy="cliente")
     private List<LocacaoModel> locacao;
@@ -20,19 +32,35 @@ public class ClienteModel extends PessoaModel {
         super();
     }
 
-    public String getTelefoneCliente() {
-        return telefoneCliente;
+    public UUID getIdCliente() {
+        return idCliente;
     }
 
-    public void setTelefoneCliente(String telefoneCliente) {
-        this.telefoneCliente = telefoneCliente;
+    public void setIdCliente(UUID idCliente) {
+        this.idCliente = idCliente;
     }
 
-    public double getIdadeCliente() {
-        return idadeCliente;
+    public String getNome() {
+        return nome;
     }
 
-    public void setIdadeCliente(double idadeCliente) {
-        this.idadeCliente = idadeCliente;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

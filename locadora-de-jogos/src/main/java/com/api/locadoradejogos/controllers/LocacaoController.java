@@ -3,8 +3,8 @@ package com.api.locadoradejogos.controllers;
 import com.api.locadoradejogos.dtos.LocacaoDto;
 import com.api.locadoradejogos.models.JogosModel;
 import com.api.locadoradejogos.models.LocacaoModel;
+import com.api.locadoradejogos.services.JogosService;
 import com.api.locadoradejogos.services.LocacaoService;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +19,11 @@ import java.util.*;
 public class LocacaoController {
 
     final LocacaoService locacaoService;
+    final JogosService jogosService;
 
-    public LocacaoController(LocacaoService locacaoService) {
+    public LocacaoController(LocacaoService locacaoService, JogosService jogosService) {
         this.locacaoService = locacaoService;
+        this.jogosService = jogosService;
     }
 
     @PostMapping
@@ -38,11 +40,18 @@ public class LocacaoController {
         locacaoModel.setDataLocacao(dataLocacao);
         int percentual = 2;
         locacaoModel.setValorDia(locacaoService.valorDia(locacaoDto.getJogo().getPreco(), percentual));
-        long quantidadeJogos = locacaoService.validarLocacao(locacaoModel.getCliente());
-        if(quantidadeJogos >= 2){
+        int quantidadeJogosPorCLientes = locacaoService.validarLocacao(locacaoModel.getCliente());
+        double quantidadeJogosEstoque = locacaoModel.getJogo().getQuantidade();
+        if(quantidadeJogosPorCLientes >= 2){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Cliente ja esgotou o limite de locações");
         }
+        if(quantidadeJogosEstoque <= 0){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Não há jogo em estoque");
+        }
         else {
+            JogosModel jogosModel = locacaoModel.getJogo();
+            jogosModel.setQuantidade(quantidadeJogosEstoque - 1);
+            jogosService.save(jogosModel);
             return ResponseEntity.status(HttpStatus.CREATED).body(locacaoService.save(locacaoModel));
         }
     }
@@ -60,8 +69,14 @@ public class LocacaoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Locação não encontrada.");
         }
         LocacaoModel locacaoModel = locacaoModelOptional.get();
+        if(locacaoModel.getDataLocacao().after(locacaoDto.getDataDevolucao())){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Não é possível selecionar datas prévias a locação");
+        }
         locacaoModel.setDataDevolucao(locacaoDto.getDataDevolucao());
         //locacaoService.save(locacaoModel);
+        JogosModel jogosModel = locacaoModel.getJogo();
+        jogosModel.setQuantidade(locacaoModel.getJogo().getQuantidade() + 1);
+        jogosService.save(jogosModel);
         return ResponseEntity.status(HttpStatus.OK).body(locacaoService.update(locacaoModel));
     }
 

@@ -60,6 +60,7 @@ public class JogosController {
         jogosModel.setGenero(jogosDto.getGenero());
         jogosModel.setConsole(jogosDto.getConsole());
         jogosModel.setPreco(jogosDto.getPreco());
+        jogosModel.setQuantidade(jogosDto.getQuantidade());
         return ResponseEntity.status(HttpStatus.OK).body(jogosService.save(jogosModel));
     }
 
